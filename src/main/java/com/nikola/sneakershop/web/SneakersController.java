@@ -1,0 +1,88 @@
+package com.nikola.sneakershop.web;
+
+import com.nikola.sneakershop.model.Sneaker;
+import com.nikola.sneakershop.model.dto.SneakerDto;
+import com.nikola.sneakershop.model.dto.SneakerSizeDto;
+import com.nikola.sneakershop.service.SneakerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/sneakers")
+@CrossOrigin(origins = "http://localhost:3000")
+public class SneakersController {
+    private final SneakerService sneakerService;
+
+    public SneakersController(SneakerService sneakerService) {
+        this.sneakerService = sneakerService;
+    }
+
+    @GetMapping
+    public List<Sneaker> getAllSneakers() {
+        return this.sneakerService.listAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Sneaker> getSneaker(@PathVariable Long id) {
+        return this.sneakerService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<?> filterSneakers(@RequestBody Map<String, Object> filters) {
+        try {
+            List<Sneaker> filteredSneakers = sneakerService.filterSneakers(filters);
+            return ResponseEntity.ok(filteredSneakers);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "An error occurred while filtering sneakers: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Sneaker> createSneaker(@RequestBody SneakerDto sneaker) {
+        return this.sneakerService.save(sneaker)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Sneaker> updateSneaker(@PathVariable Long id,
+                                              @RequestBody SneakerDto sneaker) {
+        return this.sneakerService.update(id, sneaker)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/updateSizes/{id}")
+    public ResponseEntity<Sneaker> updateSizes(@PathVariable Long id,
+                                               @RequestBody List<SneakerSizeDto> sneakerSizes) {
+        return this.sneakerService.updateSizes(id, sneakerSizes)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/sell/{id}")
+    public ResponseEntity<Sneaker> sellSneaker(@PathVariable Long id,
+                                               @RequestParam int size,
+                                               @RequestParam int quantity) {
+        return this.sneakerService.sellSneaker(id, size, quantity)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteSneaker(@PathVariable Long id) {
+        if (this.sneakerService.findById(id).isPresent()) {
+            this.sneakerService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+}

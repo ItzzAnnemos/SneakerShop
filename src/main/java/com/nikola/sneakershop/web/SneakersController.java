@@ -6,7 +6,6 @@ import com.nikola.sneakershop.model.dto.DisplaySneakerDetailsDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerListDto;
 import com.nikola.sneakershop.model.dto.SneakerSizeDto;
 import com.nikola.sneakershop.service.application.SneakerApplicationService;
-import com.nikola.sneakershop.service.domain.SneakerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +56,7 @@ public class SneakersController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<DisplaySneakerDetailsDto> updateSneaker(@PathVariable Long id,
-                                              @RequestBody CreateSneakerDto sneaker) {
+                                                                  @RequestBody CreateSneakerDto sneaker) {
         return this.sneakerService.update(id, sneaker)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -65,7 +64,7 @@ public class SneakersController {
 
     @PutMapping("/updateSizes/{id}")
     public ResponseEntity<DisplaySneakerDetailsDto> updateSizes(@PathVariable Long id,
-                                               @RequestBody List<SneakerSizeDto> sneakerSizes) {
+                                                                @RequestBody List<SneakerSizeDto> sneakerSizes) {
         return this.sneakerService.updateSizes(id, sneakerSizes)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -73,8 +72,8 @@ public class SneakersController {
 
     @PatchMapping("/sell/{id}")
     public ResponseEntity<DisplaySneakerDetailsDto> sellSneaker(@PathVariable Long id,
-                                               @RequestParam int size,
-                                               @RequestParam int quantity) {
+                                                                @RequestParam int size,
+                                                                @RequestParam int quantity) {
         return this.sneakerService.sellSneaker(id, size, quantity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

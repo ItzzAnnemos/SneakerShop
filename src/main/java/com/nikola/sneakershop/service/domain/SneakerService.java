@@ -1,7 +1,6 @@
 package com.nikola.sneakershop.service.domain;
 
 import com.nikola.sneakershop.model.Sneaker;
-import com.nikola.sneakershop.model.dto.CreateSneakerDto;
 import com.nikola.sneakershop.model.dto.SneakerSizeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

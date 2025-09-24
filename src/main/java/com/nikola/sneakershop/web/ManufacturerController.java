@@ -1,7 +1,7 @@
 package com.nikola.sneakershop.web;
 
 import com.nikola.sneakershop.model.Manufacturer;
-import com.nikola.sneakershop.service.domain.ManufacturerService;
+import com.nikola.sneakershop.service.application.ManufacturerApplicationService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,16 +13,14 @@ import java.util.List;
 @RequestMapping("/api/manufacturers")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ManufacturerController {
-    private final ManufacturerService manufacturerService;
+    private final ManufacturerApplicationService manufacturerApplicationService;
 
-    public ManufacturerController(ManufacturerService manufacturerService) {
-        this.manufacturerService = manufacturerService;
+    public ManufacturerController(ManufacturerApplicationService manufacturerApplicationService) {
+        this.manufacturerApplicationService = manufacturerApplicationService;
     }
 
     @GetMapping
     public List<Manufacturer> getAllManufacturers() {
-        return this.manufacturerService.listAll();
+        return this.manufacturerApplicationService.listAll();
     }
-
-
 }

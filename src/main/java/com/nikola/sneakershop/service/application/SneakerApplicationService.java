@@ -4,7 +4,7 @@ import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.dto.CreateSneakerDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerDetailsDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerListDto;
-import com.nikola.sneakershop.model.dto.SneakerSizeDto;
+import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,7 +26,7 @@ public interface SneakerApplicationService {
 
     Optional<DisplaySneakerDetailsDto> update(Long id, CreateSneakerDto sneaker);
 
-    Optional<DisplaySneakerDetailsDto> updateSizes(Long id, List<SneakerSizeDto> sneakerSizes);
+    Optional<DisplaySneakerDetailsDto> updateSizes(Long id, List<CreateSneakerSizeDto> sneakerSizes);
 
     Optional<DisplaySneakerDetailsDto> sellSneaker(Long id, int size, int quantity);
 

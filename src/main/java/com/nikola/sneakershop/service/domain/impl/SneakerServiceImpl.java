@@ -2,7 +2,7 @@ package com.nikola.sneakershop.service.domain.impl;
 
 import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.SneakerSize;
-import com.nikola.sneakershop.model.dto.SneakerSizeDto;
+import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
 import com.nikola.sneakershop.model.enumerations.Color;
 import com.nikola.sneakershop.model.enumerations.Gender;
 import com.nikola.sneakershop.model.enumerations.Purpose;
@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 @Service
@@ -34,7 +35,7 @@ public class SneakerServiceImpl implements SneakerService {
     }
 
     @Override
-    public Page<Sneaker> findAll(Pageable pageable){
+    public Page<Sneaker> findAll(Pageable pageable) {
         return this.sneakerRepository.findAll(pageable);
     }
 
@@ -261,7 +262,7 @@ public class SneakerServiceImpl implements SneakerService {
     }
 
     @Override
-    public Optional<Sneaker> updateSizes(Long id, List<SneakerSizeDto> sneakerSizes) {
+    public Optional<Sneaker> updateSizes(Long id, List<CreateSneakerSizeDto> sneakerSizes) {
         Optional<Sneaker> sneakerOpt = this.findById(id);
         if (sneakerOpt.isEmpty()) {
             return Optional.empty();
@@ -274,13 +275,12 @@ public class SneakerServiceImpl implements SneakerService {
             existingSizesMap.put(size.getSize(), size);
         }
 
-        for (SneakerSizeDto sizeDto : sneakerSizes) {
-            if (existingSizesMap.containsKey(sizeDto.getSize())) {
-                SneakerSize existingSize = existingSizesMap.get(sizeDto.getSize());
-                existingSize.setQuantity(sizeDto.getQuantity());
-            }
-            else {
-                SneakerSize newSize = new SneakerSize(sizeDto.getSize(), sizeDto.getQuantity(), sneaker);
+        for (CreateSneakerSizeDto sizeDto : sneakerSizes) {
+            if (existingSizesMap.containsKey(sizeDto.size())) {
+                SneakerSize existingSize = existingSizesMap.get(sizeDto.size());
+                existingSize.setQuantity(sizeDto.quantity());
+            } else {
+                SneakerSize newSize = new SneakerSize(sizeDto.size(), sizeDto.quantity(), sneaker);
                 sneaker.getSizes().add(newSize);
             }
         }
@@ -302,8 +302,7 @@ public class SneakerServiceImpl implements SneakerService {
             return Optional.empty();
         }
 
-        return this.updateSizes(id,
-                List.of(new SneakerSizeDto(sneakerSize.getSize(), sneakerSize.getQuantity() - quantity)));
+        return Optional.empty();
     }
 
 

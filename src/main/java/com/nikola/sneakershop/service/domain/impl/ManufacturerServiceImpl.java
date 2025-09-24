@@ -32,15 +32,19 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     }
 
     @Override
-    public Optional<Manufacturer> save(String name) {
-        return Optional.of(this.manufacturerRepository.save(new Manufacturer(name)));
+    public Optional<Manufacturer> save(Manufacturer manufacturer) {
+        return Optional.of(this.manufacturerRepository.save(manufacturer));
     }
 
     @Override
-    public Optional<Manufacturer> update(Long id, String name) {
-        Manufacturer manufacturer = this.findById(id).get();
-        manufacturer.setName(name);
-        return Optional.of(this.manufacturerRepository.save(manufacturer));
+    public Optional<Manufacturer> update(Long id, Manufacturer manufacturer) {
+        return manufacturerRepository.findById(id).map(existingManufacturer -> {
+            if (manufacturer.getName() != null) {
+                existingManufacturer.setName(manufacturer.getName());
+            }
+
+            return this.manufacturerRepository.save(existingManufacturer);
+        });
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.nikola.sneakershop.web;
 
-import com.nikola.sneakershop.model.Manufacturer;
+import com.nikola.sneakershop.model.dto.DisplayManufacturerDto;
 import com.nikola.sneakershop.service.application.ManufacturerApplicationService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class ManufacturerController {
     }
 
     @GetMapping
-    public List<Manufacturer> getAllManufacturers() {
+    public List<DisplayManufacturerDto> getAllManufacturers() {
         return this.manufacturerApplicationService.listAll();
     }
 }

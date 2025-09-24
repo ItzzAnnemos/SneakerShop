@@ -4,7 +4,7 @@ import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.dto.CreateSneakerDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerDetailsDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerListDto;
-import com.nikola.sneakershop.model.dto.SneakerSizeDto;
+import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
 import com.nikola.sneakershop.service.application.SneakerApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +64,7 @@ public class SneakersController {
 
     @PutMapping("/updateSizes/{id}")
     public ResponseEntity<DisplaySneakerDetailsDto> updateSizes(@PathVariable Long id,
-                                                                @RequestBody List<SneakerSizeDto> sneakerSizes) {
+                                                                @RequestBody List<CreateSneakerSizeDto> sneakerSizes) {
         return this.sneakerService.updateSizes(id, sneakerSizes)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

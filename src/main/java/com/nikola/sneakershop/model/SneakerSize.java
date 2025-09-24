@@ -11,16 +11,17 @@ public class SneakerSize {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int size;
+    private Integer size;
 
-    private int quantity;
+    private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "sneaker_id")
     @JsonBackReference
     private Sneaker sneaker;
 
-    public SneakerSize() {}
+    public SneakerSize() {
+    }
 
     public SneakerSize(int size, int quantity, Sneaker sneaker) {
         this.size = size;

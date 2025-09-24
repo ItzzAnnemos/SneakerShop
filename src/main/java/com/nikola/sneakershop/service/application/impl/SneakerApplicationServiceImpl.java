@@ -5,7 +5,7 @@ import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.dto.CreateSneakerDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerDetailsDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerListDto;
-import com.nikola.sneakershop.model.dto.SneakerSizeDto;
+import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
 import com.nikola.sneakershop.service.application.SneakerApplicationService;
 import com.nikola.sneakershop.service.domain.ManufacturerService;
 import com.nikola.sneakershop.service.domain.SneakerService;
@@ -63,7 +63,7 @@ public class SneakerApplicationServiceImpl implements SneakerApplicationService 
     }
 
     @Override
-    public Optional<DisplaySneakerDetailsDto> updateSizes(Long id, List<SneakerSizeDto> sneakerSizes) {
+    public Optional<DisplaySneakerDetailsDto> updateSizes(Long id, List<CreateSneakerSizeDto> sneakerSizes) {
         return Optional.empty();
     }
 

@@ -1,20 +1,21 @@
 package com.nikola.sneakershop.service.application;
 
-import com.nikola.sneakershop.model.Manufacturer;
+import com.nikola.sneakershop.model.dto.CreateManufacturerDto;
+import com.nikola.sneakershop.model.dto.DisplayManufacturerDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ManufacturerApplicationService {
-    List<Manufacturer> listAll();
+    List<DisplayManufacturerDto> listAll();
 
-    Optional<Manufacturer> findById(Long id);
+    Optional<DisplayManufacturerDto> findById(Long id);
 
-    Optional<Manufacturer> findByName(String name);
+    Optional<DisplayManufacturerDto> findByName(String name);
 
-    Optional<Manufacturer> save(String name);
+    Optional<DisplayManufacturerDto> save(CreateManufacturerDto createManufacturerDto);
 
-    Optional<Manufacturer> update(Long id, String name);
+    Optional<DisplayManufacturerDto> update(Long id, CreateManufacturerDto createManufacturerDto);
 
     void deleteById(Long id);
 }

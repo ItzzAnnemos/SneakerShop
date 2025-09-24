@@ -12,4 +12,10 @@ public interface SneakerSizeService {
     List<EnumValueDto> getAvailableSizes();
 
     Optional<SneakerSize> getSneakerSizeBySneakerIdAndSize(Long id, int size);
+
+    Optional<SneakerSize> save(SneakerSize sneakerSize);
+
+    Optional<SneakerSize> update(Long id, SneakerSize sneakerSize);
+
+    void delete(Long id);
 }

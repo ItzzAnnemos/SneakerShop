@@ -1,4 +1,4 @@
-package com.nikola.sneakershop.service;
+package com.nikola.sneakershop.service.application;
 
 import com.nikola.sneakershop.model.SneakerSize;
 import com.nikola.sneakershop.model.dto.EnumValueDto;
@@ -6,7 +6,7 @@ import com.nikola.sneakershop.model.dto.EnumValueDto;
 import java.util.List;
 import java.util.Optional;
 
-public interface SneakerSizeService {
+public interface SneakerSizeApplicationService {
     List<SneakerSize> listAll();
 
     List<EnumValueDto> getAvailableSizes();

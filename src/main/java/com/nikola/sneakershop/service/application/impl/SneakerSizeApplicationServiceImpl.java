@@ -1,9 +1,9 @@
-package com.nikola.sneakershop.service.impl;
+package com.nikola.sneakershop.service.application.impl;
 
 import com.nikola.sneakershop.model.SneakerSize;
 import com.nikola.sneakershop.model.dto.EnumValueDto;
 import com.nikola.sneakershop.repository.SneakerSizeRepository;
-import com.nikola.sneakershop.service.SneakerSizeService;
+import com.nikola.sneakershop.service.domain.SneakerSizeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class SneakerSizeServiceImpl implements SneakerSizeService {
+public class SneakerSizeApplicationServiceImpl implements SneakerSizeService {
     private final SneakerSizeRepository sneakerSizeRepository;
 
-    public SneakerSizeServiceImpl(SneakerSizeRepository sneakerSizeRepository) {
+    public SneakerSizeApplicationServiceImpl(SneakerSizeRepository sneakerSizeRepository) {
         this.sneakerSizeRepository = sneakerSizeRepository;
     }
 

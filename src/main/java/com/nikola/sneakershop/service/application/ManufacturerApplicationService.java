@@ -1,11 +1,11 @@
-package com.nikola.sneakershop.service;
+package com.nikola.sneakershop.service.application;
 
 import com.nikola.sneakershop.model.Manufacturer;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ManufacturerService {
+public interface ManufacturerApplicationService {
     List<Manufacturer> listAll();
 
     Optional<Manufacturer> findById(Long id);

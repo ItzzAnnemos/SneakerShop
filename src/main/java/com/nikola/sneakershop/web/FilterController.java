@@ -4,7 +4,7 @@ import com.nikola.sneakershop.model.dto.EnumValueDto;
 import com.nikola.sneakershop.model.enumerations.Color;
 import com.nikola.sneakershop.model.enumerations.Gender;
 import com.nikola.sneakershop.model.enumerations.Purpose;
-import com.nikola.sneakershop.service.SneakerSizeService;
+import com.nikola.sneakershop.service.domain.SneakerSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

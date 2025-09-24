@@ -1,21 +1,20 @@
-package com.nikola.sneakershop.service.impl;
+package com.nikola.sneakershop.service.domain.impl;
 
 import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.SneakerSize;
-import com.nikola.sneakershop.model.dto.SneakerDto;
 import com.nikola.sneakershop.model.dto.SneakerSizeDto;
 import com.nikola.sneakershop.model.enumerations.Color;
 import com.nikola.sneakershop.model.enumerations.Gender;
 import com.nikola.sneakershop.model.enumerations.Purpose;
 import com.nikola.sneakershop.repository.SneakerRepository;
-import com.nikola.sneakershop.service.ManufacturerService;
-import com.nikola.sneakershop.service.SneakerService;
-import com.nikola.sneakershop.service.SneakerSizeService;
+import com.nikola.sneakershop.service.domain.ManufacturerService;
+import com.nikola.sneakershop.service.domain.SneakerService;
+import com.nikola.sneakershop.service.domain.SneakerSizeService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class SneakerServiceImpl implements SneakerService {
@@ -29,10 +28,14 @@ public class SneakerServiceImpl implements SneakerService {
         this.sneakerSizeService = sneakerSizeService;
     }
 
-
     @Override
     public List<Sneaker> listAll() {
         return this.sneakerRepository.findAll();
+    }
+
+    @Override
+    public Page<Sneaker> findAll(Pageable pageable){
+        return this.sneakerRepository.findAll(pageable);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class SneakerServiceImpl implements SneakerService {
                         try {
                             manufacturers.add(item.toString());
                         } catch (IllegalArgumentException e) {
-                            // Log invalid color value but continue processing
+                            // Log invalid getColor value but continue processing
                             System.err.println("Invalid manufacturer value: " + item);
                         }
                     }
@@ -218,10 +221,10 @@ public class SneakerServiceImpl implements SneakerService {
     }
 
     @Override
-    public Optional<Sneaker> save(SneakerDto sneaker) {
-        if (sneaker.getManufacturer() != null && manufacturerService.findById(sneaker.getManufacturer() ).isPresent()) {
+    public Optional<Sneaker> save(Sneaker sneaker) {
+        if (sneaker.getManufacturer() != null && manufacturerService.findById(sneaker.getManufacturer().getId()).isPresent()) {
             return Optional.of(this.sneakerRepository.save(
-                    new Sneaker(manufacturerService.findById(sneaker.getManufacturer()).get(), sneaker.getName(),
+                    new Sneaker(manufacturerService.findById(sneaker.getManufacturer().getId()).get(), sneaker.getName(),
                             sneaker.getPrice(), sneaker.getGender(), sneaker.getPurpose(), sneaker.getColor(),
                             sneaker.getImages())));
         }
@@ -229,14 +232,14 @@ public class SneakerServiceImpl implements SneakerService {
     }
 
     @Override
-    public Optional<Sneaker> update(Long id, SneakerDto sneaker) {
+    public Optional<Sneaker> update(Long id, Sneaker sneaker) {
         return this.sneakerRepository.findById(id).map(existingSneaker -> {
             if (sneaker.getName() != null) {
                 existingSneaker.setName(sneaker.getName());
             }
             if (sneaker.getManufacturer() != null
-                    && manufacturerService.findById(sneaker.getManufacturer() ).isPresent()) {
-                existingSneaker.setManufacturer(manufacturerService.findById(sneaker.getManufacturer()).get());
+                    && manufacturerService.findById(sneaker.getManufacturer().getId()).isPresent()) {
+                existingSneaker.setManufacturer(manufacturerService.findById(sneaker.getManufacturer().getId()).get());
             }
             if (sneaker.getPrice() != 0) {
                 existingSneaker.setPrice(sneaker.getPrice());

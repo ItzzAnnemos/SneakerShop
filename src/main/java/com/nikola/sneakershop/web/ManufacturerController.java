@@ -1,7 +1,7 @@
 package com.nikola.sneakershop.web;
 
 import com.nikola.sneakershop.model.Manufacturer;
-import com.nikola.sneakershop.service.ManufacturerService;
+import com.nikola.sneakershop.service.domain.ManufacturerService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

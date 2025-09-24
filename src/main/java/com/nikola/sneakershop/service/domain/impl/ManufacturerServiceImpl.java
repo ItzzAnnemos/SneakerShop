@@ -1,8 +1,8 @@
-package com.nikola.sneakershop.service.impl;
+package com.nikola.sneakershop.service.domain.impl;
 
 import com.nikola.sneakershop.model.Manufacturer;
 import com.nikola.sneakershop.repository.ManufacturerRepository;
-import com.nikola.sneakershop.service.ManufacturerService;
+import com.nikola.sneakershop.service.domain.ManufacturerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

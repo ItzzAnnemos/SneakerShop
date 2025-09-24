@@ -18,7 +18,7 @@ public record DisplaySneakerListDto(
                 sneaker.getManufacturer().getId(),
                 sneaker.getName(),
                 sneaker.getPrice(),
-                sneaker.getImages().getFirst()
+                sneaker.getImages().get(0)
         );
     }
 

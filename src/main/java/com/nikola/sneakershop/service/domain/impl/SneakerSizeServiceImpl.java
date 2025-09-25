@@ -1,11 +1,9 @@
 package com.nikola.sneakershop.service.domain.impl;
 
-import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.SneakerSize;
 import com.nikola.sneakershop.model.dto.EnumValueDto;
 import com.nikola.sneakershop.repository.SneakerRepository;
 import com.nikola.sneakershop.repository.SneakerSizeRepository;
-import com.nikola.sneakershop.service.domain.SneakerService;
 import com.nikola.sneakershop.service.domain.SneakerSizeService;
 import org.springframework.stereotype.Service;
 

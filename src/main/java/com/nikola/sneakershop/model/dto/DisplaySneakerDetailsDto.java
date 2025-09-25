@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public record DisplaySneakerDetailsDto(
         Long id,
-        Long manufacturerId,
+        DisplayManufacturerDto manufacturer,
         String name,
         double price,
         Gender gender,
@@ -24,7 +24,7 @@ public record DisplaySneakerDetailsDto(
     public static DisplaySneakerDetailsDto from(Sneaker sneaker) {
         return new DisplaySneakerDetailsDto(
                 sneaker.getId(),
-                sneaker.getManufacturer().getId(),
+                DisplayManufacturerDto.from(sneaker.getManufacturer()),
                 sneaker.getName(),
                 sneaker.getPrice(),
                 sneaker.getGender(),

@@ -3,6 +3,7 @@ package com.nikola.sneakershop.service.domain.impl;
 import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.SneakerSize;
 import com.nikola.sneakershop.model.dto.EnumValueDto;
+import com.nikola.sneakershop.repository.SneakerRepository;
 import com.nikola.sneakershop.repository.SneakerSizeRepository;
 import com.nikola.sneakershop.service.domain.SneakerService;
 import com.nikola.sneakershop.service.domain.SneakerSizeService;
@@ -15,11 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class SneakerSizeServiceImpl implements SneakerSizeService {
     private final SneakerSizeRepository sneakerSizeRepository;
-    private final SneakerService sneakerService;
+    private final SneakerRepository sneakerRepository;
 
-    public SneakerSizeServiceImpl(SneakerSizeRepository sneakerSizeRepository, SneakerService sneakerService) {
+    public SneakerSizeServiceImpl(SneakerSizeRepository sneakerSizeRepository, SneakerRepository sneakerRepository) {
         this.sneakerSizeRepository = sneakerSizeRepository;
-        this.sneakerService = sneakerService;
+        this.sneakerRepository = sneakerRepository;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class SneakerSizeServiceImpl implements SneakerSizeService {
 
     @Override
     public Optional<SneakerSize> save(SneakerSize sneakerSize) {
-        if (sneakerSize.getSneaker() != null && sneakerService.findById(sneakerSize.getSneaker().getId()).isPresent()) {
+        if (sneakerSize.getSneaker() != null && sneakerRepository.findById(sneakerSize.getSneaker().getId()).isPresent()) {
             return Optional.of(sneakerSizeRepository.save(sneakerSize));
         }
         return Optional.empty();
@@ -58,8 +59,8 @@ public class SneakerSizeServiceImpl implements SneakerSizeService {
             if (sneakerSize.getQuantity() != null) {
                 existingSneakerSize.setQuantity(sneakerSize.getQuantity());
             }
-            if (sneakerSize.getSneaker() != null && sneakerService.findById(sneakerSize.getSneaker().getId()).isPresent()) {
-                existingSneakerSize.setSneaker(sneakerService.findById(sneakerSize.getSneaker().getId()).get());
+            if (sneakerSize.getSneaker() != null && sneakerRepository.findById(sneakerSize.getSneaker().getId()).isPresent()) {
+                existingSneakerSize.setSneaker(sneakerRepository.findById(sneakerSize.getSneaker().getId()).get());
             }
             return sneakerSizeRepository.save(existingSneakerSize);
         });

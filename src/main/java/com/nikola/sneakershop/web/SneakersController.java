@@ -1,17 +1,19 @@
 package com.nikola.sneakershop.web;
 
-import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.dto.CreateSneakerDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerDetailsDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerListDto;
 import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
+import com.nikola.sneakershop.model.enumerations.Color;
+import com.nikola.sneakershop.model.enumerations.Gender;
+import com.nikola.sneakershop.model.enumerations.Purpose;
 import com.nikola.sneakershop.service.application.SneakerApplicationService;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/sneakers")
@@ -23,9 +25,22 @@ public class SneakersController {
         this.sneakerService = sneakerService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<DisplaySneakerListDto> getAllSneakers() {
         return this.sneakerService.listAll();
+    }
+
+    @GetMapping
+    public Page<DisplaySneakerListDto> findAll(@RequestParam(required = false) String name,
+                                               @RequestParam(required = false) List<Long> manufacturerIds,
+                                               @RequestParam(required = false) List<Gender> genders,
+                                               @RequestParam(required = false) List<Purpose> purposes,
+                                               @RequestParam(required = false) List<Color> colors,
+                                               @RequestParam(required = false) List<Integer> sizes,
+                                               @RequestParam(required = false) Double minPrice,
+                                               @RequestParam(required = false) Double maxPrice,
+                                               Pageable pageable) {
+        return this.sneakerService.findAll(name, manufacturerIds, genders, purposes, colors, sizes, minPrice, maxPrice, pageable);
     }
 
     @GetMapping("/{id}")
@@ -33,18 +48,6 @@ public class SneakersController {
         return this.sneakerService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping("/filter")
-    public ResponseEntity<?> filterSneakers(@RequestBody Map<String, Object> filters) {
-        try {
-            List<Sneaker> filteredSneakers = sneakerService.filterSneakers(filters);
-            return ResponseEntity.ok(filteredSneakers);
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "An error occurred while filtering sneakers: " + e.getMessage()));
-        }
     }
 
     @PostMapping("/add")

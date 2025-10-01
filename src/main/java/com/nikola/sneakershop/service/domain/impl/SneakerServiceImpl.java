@@ -3,9 +3,6 @@ package com.nikola.sneakershop.service.domain.impl;
 import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.SneakerSize;
 import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
-import com.nikola.sneakershop.model.enumerations.Color;
-import com.nikola.sneakershop.model.enumerations.Gender;
-import com.nikola.sneakershop.model.enumerations.Purpose;
 import com.nikola.sneakershop.repository.SneakerRepository;
 import com.nikola.sneakershop.service.domain.ManufacturerService;
 import com.nikola.sneakershop.service.domain.SneakerService;
@@ -13,6 +10,7 @@ import com.nikola.sneakershop.service.domain.SneakerSizeService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -35,190 +33,13 @@ public class SneakerServiceImpl implements SneakerService {
     }
 
     @Override
-    public Page<Sneaker> findAll(Pageable pageable) {
-        return this.sneakerRepository.findAll(pageable);
+    public Page<Sneaker> findAll(Specification<Sneaker> filter, Pageable pageable) {
+        return this.sneakerRepository.findAll(filter, pageable);
     }
 
     @Override
     public Optional<Sneaker> findById(Long id) {
         return this.sneakerRepository.findById(id);
-    }
-
-    @Override
-    public List<Sneaker> filterSneakers(Map<String, Object> filters) {
-        String query = null;
-        if (filters.containsKey("search") && filters.get("search") != null && !filters.get("search").toString().isEmpty()) {
-            query = filters.get("search").toString();
-        }
-
-        // Safer handling of manufacturer
-        List<String> manufacturers = null;
-        if (filters.containsKey("manufacturers") && filters.get("manufacturers") != null) {
-            try {
-                manufacturers = new ArrayList<>();
-                Object manObj = filters.get("manufacturers");
-
-                if (manObj instanceof List) {
-                    for (Object item : (List<?>) manObj) {
-                        try {
-                            manufacturers.add(item.toString());
-                        } catch (IllegalArgumentException e) {
-                            // Log invalid getColor value but continue processing
-                            System.err.println("Invalid manufacturer value: " + item);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // Log the error but return empty list rather than failing
-                System.err.println("Error processing manufacturers filters: " + e.getMessage());
-                manufacturers = Collections.emptyList();
-            }
-        }
-
-        // Safer handling of color filters
-        List<Color> colors = null;
-        if (filters.containsKey("colors") && filters.get("colors") != null) {
-            try {
-                colors = new ArrayList<>();
-                Object colorObj = filters.get("colors");
-
-                if (colorObj instanceof List) {
-                    for (Object item : (List<?>) colorObj) {
-                        try {
-                            colors.add(Color.valueOf(item.toString().toUpperCase()));
-                        } catch (IllegalArgumentException e) {
-                            // Log invalid color value but continue processing
-                            System.err.println("Invalid color value: " + item);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // Log the error but return empty list rather than failing
-                System.err.println("Error processing color filters: " + e.getMessage());
-                colors = Collections.emptyList();
-            }
-        }
-
-        // Safer handling of purpose filters
-        List<Purpose> purposes = null;
-        if (filters.containsKey("purposes") && filters.get("purposes") != null) {
-            try {
-                purposes = new ArrayList<>();
-                Object purposeObj = filters.get("purposes");
-
-                if (purposeObj instanceof List) {
-                    for (Object item : (List<?>) purposeObj) {
-                        try {
-                            purposes.add(Purpose.valueOf(item.toString().toUpperCase()));
-                        } catch (IllegalArgumentException e) {
-                            // Log invalid purpose value but continue processing
-                            System.err.println("Invalid purpose value: " + item);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // Log the error but return empty list rather than failing
-                System.err.println("Error processing purpose filters: " + e.getMessage());
-                purposes = Collections.emptyList();
-            }
-        }
-
-        // Safer handling of gender filters
-        List<Gender> genders = null;
-        if (filters.containsKey("genders") && filters.get("genders") != null) {
-            try {
-                genders = new ArrayList<>();
-                Object genderObj = filters.get("genders");
-
-                if (genderObj instanceof List) {
-                    for (Object item : (List<?>) genderObj) {
-                        try {
-                            genders.add(Gender.valueOf(item.toString().toUpperCase()));
-                        } catch (IllegalArgumentException e) {
-                            // Log invalid gender value but continue processing
-                            System.err.println("Invalid gender value: " + item);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // Log the error but return empty list rather than failing
-                System.err.println("Error processing gender filters: " + e.getMessage());
-                genders = Collections.emptyList();
-            }
-        }
-
-        // Safer handling of size filters
-        List<Integer> sizes = null;
-        if (filters.containsKey("sizes") && filters.get("sizes") != null) {
-            try {
-                sizes = new ArrayList<>();
-                Object sizeObj = filters.get("sizes");
-
-                if (sizeObj instanceof List) {
-                    for (Object item : (List<?>) sizeObj) {
-                        try {
-                            sizes.add(Integer.parseInt(item.toString()));
-                        } catch (NumberFormatException e) {
-                            // Log invalid size value but continue processing
-                            System.err.println("Invalid size value: " + item);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // Log the error but return empty list rather than failing
-                System.err.println("Error processing size filters: " + e.getMessage());
-                sizes = Collections.emptyList();
-            }
-        }
-
-        // Safer handling of price range
-        Double minPrice = null;
-        Double maxPrice = null;
-        if (filters.containsKey("price") && filters.get("price") != null) {
-            try {
-                Object priceObj = filters.get("price");
-
-                if (priceObj instanceof Map) {
-                    Map<?, ?> priceMap = (Map<?, ?>) priceObj;
-
-                    if (priceMap.containsKey("min") && priceMap.get("min") != null) {
-                        try {
-                            minPrice = Double.parseDouble(priceMap.get("min").toString());
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid min price value: " + priceMap.get("min"));
-                        }
-                    }
-
-                    if (priceMap.containsKey("max") && priceMap.get("max") != null) {
-                        try {
-                            maxPrice = Double.parseDouble(priceMap.get("max").toString());
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid max price value: " + priceMap.get("max"));
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // Log the error but continue with null values
-                System.err.println("Error processing price filters: " + e.getMessage());
-            }
-        }
-
-        // Add logging to see what values are being sent to the repository
-        System.out.println("Filtering with parameters: " +
-                "query=" + query +
-                ", manufacturers=" + manufacturers +
-                ", colors=" + colors +
-                ", purposes=" + purposes +
-                ", genders=" + genders +
-                ", sizes=" + sizes +
-                ", minPrice=" + minPrice +
-                ", maxPrice=" + maxPrice);
-
-        // Handle potential null return from repository
-        List<Sneaker> results = sneakerRepository.findByCriteria(
-                query, manufacturers, colors, purposes, genders, sizes, minPrice, maxPrice);
-
-        return results != null ? results : Collections.emptyList();
     }
 
     @Override

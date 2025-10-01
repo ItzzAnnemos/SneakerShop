@@ -19,7 +19,7 @@ public record DisplaySneakerDetailsDto(
         Purpose purpose,
         Color color,
         List<String> images,
-        List<Long> sizesId) {
+        List<DisplaySneakerSizeDto> sizes) {
 
     public static DisplaySneakerDetailsDto from(Sneaker sneaker) {
         return new DisplaySneakerDetailsDto(
@@ -31,7 +31,7 @@ public record DisplaySneakerDetailsDto(
                 sneaker.getPurpose(),
                 sneaker.getColor(),
                 sneaker.getImages(),
-                sneaker.getSizes().stream().map(SneakerSize::getId).toList()
+                sneaker.getSizes().stream().map(DisplaySneakerSizeDto::from).toList()
         );
     }
 

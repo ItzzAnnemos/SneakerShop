@@ -6,11 +6,16 @@ import com.nikola.sneakershop.model.dto.CreateSneakerDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerDetailsDto;
 import com.nikola.sneakershop.model.dto.DisplaySneakerListDto;
 import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
+import com.nikola.sneakershop.model.enumerations.Color;
+import com.nikola.sneakershop.model.enumerations.Gender;
+import com.nikola.sneakershop.model.enumerations.Purpose;
 import com.nikola.sneakershop.service.application.SneakerApplicationService;
 import com.nikola.sneakershop.service.domain.ManufacturerService;
 import com.nikola.sneakershop.service.domain.SneakerService;
+import com.nikola.sneakershop.service.specification.FieldFilterSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,18 +37,52 @@ public class SneakerApplicationServiceImpl implements SneakerApplicationService 
     }
 
     @Override
-    public Page<DisplaySneakerListDto> findAll(Pageable pageable) {
-        return this.sneakerService.findAll(pageable).map(DisplaySneakerListDto::from);
+    public Page<DisplaySneakerListDto> findAll(String name,
+                                               List<Long> manufacturerIds,
+                                               List<Gender> genders,
+                                               List<Purpose> purposes,
+                                               List<Color> colors,
+                                               List<Integer> sizes,
+                                               Double minPrice,
+                                               Double maxPrice,
+                                               Pageable pageable) {
+        Specification<Sneaker> spec = Specification.where(null);
+
+        if (name != null) {
+            spec = spec.and(FieldFilterSpecification.filterContainsText(Sneaker.class, "name", name));
+        }
+
+        if (manufacturerIds != null && !manufacturerIds.isEmpty()) {
+            spec = spec.and(FieldFilterSpecification.filterIn(Sneaker.class, "manufacturer.id", manufacturerIds));
+        }
+
+        if (genders != null && !genders.isEmpty()) {
+            spec = spec.and(FieldFilterSpecification.filterIn(Sneaker.class, "gender", genders));
+        }
+
+        if (purposes != null && !purposes.isEmpty()) {
+            spec = spec.and(FieldFilterSpecification.filterIn(Sneaker.class, "purpose", purposes));
+        }
+
+        if (colors != null && !colors.isEmpty()) {
+            spec = spec.and(FieldFilterSpecification.filterIn(Sneaker.class, "color", colors));
+        }
+
+        if (sizes != null) {
+            spec = spec.and(FieldFilterSpecification.filterCollectionIn("sizes", "size", sizes));
+        }
+
+        if (minPrice != null || maxPrice != null) {
+            spec = spec.and(FieldFilterSpecification.filterBetween(Sneaker.class, "price", minPrice, maxPrice));
+        }
+
+        return sneakerService.findAll(spec, pageable)
+                .map(DisplaySneakerListDto::from);
     }
 
     @Override
     public Optional<DisplaySneakerDetailsDto> findById(Long id) {
         return this.sneakerService.findById(id).map(DisplaySneakerDetailsDto::from);
-    }
-
-    @Override
-    public List<Sneaker> filterSneakers(Map<String, Object> filters) {
-        return List.of();
     }
 
     @Override

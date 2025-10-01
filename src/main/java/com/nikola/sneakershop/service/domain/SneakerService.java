@@ -4,18 +4,16 @@ import com.nikola.sneakershop.model.Sneaker;
 import com.nikola.sneakershop.model.dto.CreateSneakerSizeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
-
 
 public interface SneakerService {
     List<Sneaker> listAll();
 
-    Page<Sneaker> findAll(Pageable pageable);
+    Page<Sneaker> findAll(Specification<Sneaker> filter, Pageable pageable);
 
     Optional<Sneaker> findById(Long id);
-
-    List<Sneaker> filterSneakers(Map<String, Object> filters);
 
     Optional<Sneaker> save(Sneaker sneaker);
 
